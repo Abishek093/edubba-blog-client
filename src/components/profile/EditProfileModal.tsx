@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useUpdateProfileMutation, IUserResponse, useGetPresignedUrlMutation } from "../../store/services/authApi";
+import { useUpdateProfileMutation, IUserResponse } from "../../store/services/authApi";
 import defaultProfilePic from "../../assets/profile.png";
 import { getPresignedUrl, uploadImageToS3 } from "../../utils/imageUploadHelper";
 import { Formik, Form, Field, ErrorMessage } from "formik";
@@ -17,8 +17,7 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({ user, onClose, onUp
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState("");
 
-  const [updateProfile, { isLoading }] = useUpdateProfileMutation();
-  const [getPresignedUrlMutation] = useGetPresignedUrlMutation();
+  const [updateProfile] = useUpdateProfileMutation();
 
   const validationSchema = Yup.object({
     username: Yup.string().required("Username is required"),
