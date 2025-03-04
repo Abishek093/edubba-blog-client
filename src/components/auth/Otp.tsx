@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { OtpRequest, useOtpVerificationMutation } from '../../store/services/authApi';
+import {useOtpVerificationMutation } from '../../store/services/authApi';
 import { toast } from 'sonner'
 
 const OTP_EXPIRY_KEY = 'otpExpiryTime'
@@ -22,7 +22,7 @@ const OTPVerificationPage: React.FC = () => {
   const inputRefs = useRef<(HTMLInputElement | null)[]>(Array(6).fill(null));
   const location = useLocation();
   const email = location.state?.email || 'user@example.com';
-  const [otpVerification, { isLoading, error, isSuccess }] = useOtpVerificationMutation();
+  const [otpVerification, { isLoading}] = useOtpVerificationMutation();
   const navigate = useNavigate()
 
   useEffect(()=>{
