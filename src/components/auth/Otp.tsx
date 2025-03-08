@@ -18,7 +18,7 @@ const OTPVerificationPage: React.FC = () => {
     return 120; 
   });  
 
-  const [isResending, setIsResending] = useState<boolean>(false);
+  // const [isResending, setIsResending] = useState<boolean>(false);
   const inputRefs = useRef<(HTMLInputElement | null)[]>(Array(6).fill(null));
   const location = useLocation();
   const email = location.state?.email || 'user@example.com';
@@ -104,17 +104,17 @@ const OTPVerificationPage: React.FC = () => {
     }
   };
 
-  const handleResend = () => {
-    if (timeLeft === 0) {
-      setIsResending(true);
-      setTimeout(() => {
-        setTimeLeft(120); 
-        setIsResending(false);
-        setOtp(Array(6).fill(''));
-        inputRefs.current[0]?.focus();
-      }, 1000);
-    }
-  };
+  // const handleResend = () => {
+  //   if (timeLeft === 0) {
+  //     setIsResending(true);
+  //     setTimeout(() => {
+  //       setTimeLeft(120); 
+  //       setIsResending(false);
+  //       setOtp(Array(6).fill(''));
+  //       inputRefs.current[0]?.focus();
+  //     }, 1000);
+  //   }
+  // };
 
   useEffect(() => {
     if (timeLeft <= 0) return;
@@ -124,11 +124,11 @@ const OTPVerificationPage: React.FC = () => {
     return () => clearInterval(timer);
   }, [timeLeft]);
 
-  const formatTime = (seconds: number): string => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-  };
+  // const formatTime = (seconds: number): string => {
+  //   const mins = Math.floor(seconds / 60);
+  //   const secs = seconds % 60;
+  //   return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  // };
 
   return (
     <div className="flex flex-col md:flex-row min-h-[600px] w-full max-w-[1000px] mx-auto my-10 shadow-lg rounded-xl overflow-hidden">
