@@ -184,7 +184,7 @@ const OTPVerificationPage: React.FC = () => {
           Verify
         </button>
 
-        <div className="mt-8 text-center">
+        {/* <div className="mt-8 text-center">
           <p className="text-[#2E2E2E] opacity-70 mb-2">
             Didn't receive the code? {timeLeft > 0 && `(${formatTime(timeLeft)})`}
           </p>
@@ -199,7 +199,7 @@ const OTPVerificationPage: React.FC = () => {
           >
             {isResending ? 'Resending...' : 'Resend Code'}
           </button>
-        </div>
+        </div> */}
 
         <div className="mt-auto text-center text-sm text-[#2E2E2E] opacity-70">
           <p>© {new Date().getFullYear()} E.DUB.BA Blog. All rights reserved.</p>
