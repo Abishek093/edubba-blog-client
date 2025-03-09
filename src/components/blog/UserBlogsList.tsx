@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, forwardRef, useImperativeHandle } from "react";
 import axiosInstance from "../../store/services/axiosInstance";
 import { toast } from "sonner";
 import CreateBlogModal from "./CreateBlogModal";
@@ -19,7 +19,10 @@ interface UserBlogsListProps {
   userId: string;
 }
 
-const UserBlogsList: React.FC<UserBlogsListProps> = ({ userId }) => {
+const UserBlogsList = forwardRef<
+  { handleBlogCreated: (newBlog: BlogItemProps) => void },
+  UserBlogsListProps
+>(({ userId }, ref) => {
   const [blogs, setBlogs] = useState<BlogItemProps[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -30,7 +33,6 @@ const UserBlogsList: React.FC<UserBlogsListProps> = ({ userId }) => {
     try {
       setLoading(true);
       const response = await axiosInstance.get(`/blogs/user-blogs/${userId}`);
-      console.log("Response: ",response)
       setBlogs(response.data);
       setError(null);
     } catch (err) {
@@ -68,6 +70,16 @@ const UserBlogsList: React.FC<UserBlogsListProps> = ({ userId }) => {
     // Refresh the list to show updated blog
     fetchUserBlogs();
   };
+
+  // Function to handle adding a new blog to the list
+  const handleBlogCreated = (newBlog: BlogItemProps) => {
+    setBlogs(prevBlogs => [newBlog, ...prevBlogs]);
+  };
+
+  // Expose methods to parent via ref
+  useImperativeHandle(ref, () => ({
+    handleBlogCreated
+  }));
 
   const BlogItem: React.FC<{ blog: BlogItemProps }> = ({ blog }) => {
     return (
@@ -147,7 +159,7 @@ const UserBlogsList: React.FC<UserBlogsListProps> = ({ userId }) => {
     );
   };
 
-  if (loading) {
+  if (loading && blogs.length === 0) {
     return (
       <div className="flex justify-center items-center py-10">
         <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-500"></div>
@@ -155,7 +167,7 @@ const UserBlogsList: React.FC<UserBlogsListProps> = ({ userId }) => {
     );
   }
 
-  if (error) {
+  if (error && blogs.length === 0) {
     return (
       <div className="text-center py-10 bg-white rounded-lg shadow-md">
         <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 mx-auto text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -192,10 +204,11 @@ const UserBlogsList: React.FC<UserBlogsListProps> = ({ userId }) => {
           username={editingBlog.author}
           isEditing={true}
           blogData={editingBlog}
+          onCreateSuccess={handleBlogCreated}
         />
       )}
     </div>
   );
-};
+});
 
 export default UserBlogsList;

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -12,6 +13,9 @@ interface BlogData {
   content: string;
   tags: string[];
   imageUrl: string;
+  createdAt?: string;
+  author?: string;
+  userId?: string;
 }
 
 interface CreateBlogModalProps {
@@ -20,6 +24,7 @@ interface CreateBlogModalProps {
   username: string;
   isEditing?: boolean;
   blogData?: BlogData;
+  onCreateSuccess?: (blog: any) => void;
 }
 
 // Yup validation schema
@@ -57,6 +62,7 @@ const CreateBlogModal: React.FC<CreateBlogModalProps> = ({
   username,
   isEditing = false,
   blogData,
+  onCreateSuccess
 }) => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
@@ -98,12 +104,18 @@ const CreateBlogModal: React.FC<CreateBlogModalProps> = ({
           imageUrl,
         };
 
+        let response;
         if (isEditing && blogData?._id) {
-          await axiosInstance.put(`/blogs/${blogData._id}`, blogDataToSubmit);
+          response = await axiosInstance.put(`/blogs/${blogData._id}`, blogDataToSubmit);
           toast.success("Blog updated successfully");
         } else {
-          await axiosInstance.post('/blogs/create-blog', blogDataToSubmit);
+          response = await axiosInstance.post('/blogs/create-blog', blogDataToSubmit);
           toast.success("Blog created successfully");
+          
+          // Call the onCreateSuccess callback with the newly created blog
+          if (onCreateSuccess && response.data && response.data.blog) {
+            onCreateSuccess(response.data.blog);
+          }
         }
 
         onClose();

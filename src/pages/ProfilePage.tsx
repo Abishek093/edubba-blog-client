@@ -1,4 +1,6 @@
-import { useState } from "react";
+
+
+import { useState, useRef } from "react";
 import Navbar from "../components/common/NavBar";
 import UserProfileHeader from "../components/blog/UserProfileHeader";
 import UserBlogsList from "../components/blog/UserBlogsList";
@@ -17,6 +19,8 @@ const ProfilePage = () => {
   const navigate = useNavigate();
   const accessToken = Cookies.get('accessToken');
   
+  const userBlogsListRef = useRef<any>(null);
+  
   const { data: userData, refetch } = useGetUserQuery(undefined, {
     skip: !accessToken
   });
@@ -32,6 +36,15 @@ const ProfilePage = () => {
     refetch();
   };
 
+  const handleBlogCreateSuccess = (newBlog: any) => {
+    if (userBlogsListRef.current && userBlogsListRef.current.handleBlogCreated) {
+      userBlogsListRef.current.handleBlogCreated(newBlog);
+    }
+    
+    // Close the modal
+    setIsCreateModalOpen(false);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
@@ -45,7 +58,10 @@ const ProfilePage = () => {
         
         <div className="mt-10">
           <h2 className="text-2xl font-semibold text-gray-800 mb-6">My Articles</h2>
-          <UserBlogsList userId={currentUser?._id || ""} />
+          <UserBlogsList 
+            userId={currentUser?._id || ""} 
+            ref={userBlogsListRef}
+          />
         </div>
       </main>
       
@@ -54,6 +70,7 @@ const ProfilePage = () => {
           onClose={() => setIsCreateModalOpen(false)}
           userId={currentUser?._id || ""}
           username={currentUser?.username || ""}
+          onCreateSuccess={handleBlogCreateSuccess}
         />
       )}
 

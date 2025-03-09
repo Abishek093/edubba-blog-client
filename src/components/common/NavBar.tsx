@@ -1,10 +1,10 @@
-
 import React, { useState } from 'react';
 import { BsSearch } from 'react-icons/bs';
 import logo from '../../assets/lOGO.png';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store';
 import { useGetUserQuery } from '../../store/services/authApi';
+import { clearUser } from '../../store/slices/authSlice';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 
@@ -13,6 +13,7 @@ const Navbar: React.FC = () => {
     const { user, isAuthenticated } = useSelector((state: RootState) => state.user);
     const accessToken = Cookies.get('accessToken');
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     
     const { data: userData } = useGetUserQuery(undefined, {
         skip: !accessToken
@@ -27,6 +28,18 @@ const Navbar: React.FC = () => {
         if (searchQuery.trim()) {
             navigate(`/search?query=${encodeURIComponent(searchQuery.trim())}`);
         }
+    };
+
+    const handleLogout = () => {
+        // Clear user data from Redux store
+        dispatch(clearUser());
+        
+        // Remove cookies
+        Cookies.remove('accessToken');
+        Cookies.remove('refreshToken');
+        
+        // Stay on homepage
+        navigate('/');
     };
 
     return (
@@ -58,9 +71,17 @@ const Navbar: React.FC = () => {
                 <div className="flex items-center pr-40">
                     <a href="/" className="mx-3 hover:text-blue-500">Home</a>
                     {(isAuthenticated && user) || accessToken ? (
-                        <a href={`/profile/${user?._id || userData?._id}`} className="mx-3 hover:text-blue-500">
-                            {user?.username || userData?.username}
-                        </a>
+                        <>
+                            <a href={`/profile/${user?._id || userData?._id}`} className="mx-3 hover:text-blue-500">
+                                {user?.username || userData?.username}
+                            </a>
+                            <button 
+                                onClick={handleLogout} 
+                                className="mx-3 text-red-500 hover:text-red-700"
+                            >
+                                Logout
+                            </button>
+                        </>
                     ) : (
                         <a href="/auth" className="mx-3 hover:text-blue-500">Login</a>
                     )}

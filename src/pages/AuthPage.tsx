@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import LoginForm from '../components/auth/LoginForm';
 import SignupForm from '../components/auth/SignupForm'; 
+import { useNavigate } from 'react-router-dom';
 
 const AuthPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'login' | 'signup'>('login');
-
+  const navigate = useNavigate()
 
   return (
     <div className="flex flex-col md:flex-row min-h-[600px] w-full max-w-[1000px] mx-auto my-10 shadow-lg rounded-xl overflow-hidden">
       <div className="flex flex-col justify-center items-center text-center bg-[#667ceb] text-white p-10 flex-1">
-        <h1 className="text-4xl font-bold text-[#2E2E2E] mb-5 tracking-wide">E.DUB.BA</h1>
+        <h1 className="text-4xl font-bold text-[#2E2E2E] mb-5 tracking-wide" onClick={()=>{navigate('/')}}>E.DUB.BA</h1>
         <p className="text-lg italic mb-10 leading-relaxed text-white opacity-90">
           Where thoughts become elegantly crafted stories
         </p>

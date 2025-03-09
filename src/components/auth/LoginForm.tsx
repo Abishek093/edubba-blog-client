@@ -98,7 +98,7 @@ const LoginForm: React.FC = () => {
       </div>
 
       {/* Remember Me */}
-      <div className="mb-5 flex items-center">
+      {/* <div className="mb-5 flex items-center">
         <input
           type="checkbox"
           id="rememberMe"
@@ -106,7 +106,7 @@ const LoginForm: React.FC = () => {
           className="w-4 h-4 border border-gray-300 rounded text-[#1B1F3B] focus:ring focus:ring-[#E0C097] cursor-pointer"
         />
         <label htmlFor="rememberMe" className="ml-2 text-sm text-[#2E2E2E] cursor-pointer">Remember Me</label>
-      </div>
+      </div> */}
 
       {isSuccess && (
         <p className="text-sm text-green-600 mb-5">Login successful! Welcome back, {data?.username}.</p>
