@@ -1,27 +1,28 @@
 import axiosInstance from '../../store/services/axiosInstance';
 
-interface Blog {
-    _id: string;
-    title: string;
-    brief: string;
-    content: string;
-    imageUrl?: string;
-    userId: string;
-    tags: string[];
-    author: string;
-    authorDetails?: {
-      profilePicture?: string;
-      profession?: string;
-    };
-    isPublished: boolean;
-    createdAt?: Date;
-    updatedAt?: Date;
-  }
-  
-  interface BlogListProps {
-    selectedCategory?: string | null;
-  }
-  
+export interface Blog {
+  _id: string;
+  title: string;
+  brief: string;
+  content: string;
+  imageUrl?: string;
+  userId: string;
+  tags: string[];
+  author: string;
+  authorDetails?: {
+    profilePicture?: string;
+    profession?: string;
+  };
+  isPublished: boolean;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface BlogListResponse {
+  blogs: Blog[];
+  totalCount: number;
+}
+
 export const blogService = {
   // Get all blogs with pagination
   getAllBlogs: async (): Promise<BlogListResponse> => {

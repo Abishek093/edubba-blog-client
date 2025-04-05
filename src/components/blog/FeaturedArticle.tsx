@@ -1,6 +1,7 @@
 // FeaturedArticle.tsx (updated)
-import React, { useEffect, useState } from 'react';
-import axiosInstance from '../../store/services/axiosInstance';
+import React from 'react';
+// import axiosInstance from '../../store/services/axiosInstance';
+import { useBlogs } from '../../hooks/useBlogs';
 
 interface Blog {
   _id: string;
@@ -22,29 +23,37 @@ interface Blog {
 
 
 const FeaturedArticle: React.FC = () => {
-  const [featuredBlog, setFeaturedBlog] = useState<Blog | null>(null);
-  const [loading, setLoading] = useState(true);
+  // const [featuredBlog, setFeaturedBlog] = useState<Blog | null>(null);
+  // const [loading, setLoading] = useState(true);
+  const { blogs, loading } = useBlogs();
+  const featuredBlog: Blog | undefined = blogs[0];
 
-  useEffect(() => {
-    const fetchFeaturedBlog = async () => {
-      try {
-        setLoading(true);
-        // Get all blogs and take the first one as featured
-        const response = await axiosInstance.get('/blogs/get-blogs');
-        if (response.data && response.data.length > 0) {
-          setFeaturedBlog(response.data[0]);
-        }
-        setLoading(false);
-      } catch (err) {
-        console.error('Error fetching featured blog:', err);
-        setLoading(false);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchFeaturedBlog = async () => {
+  //     try {
+  //       setLoading(true);
+  //       // Get all blogs and take the first one as featured
+  //       const response = await axiosInstance.get('/blogs/get-blogs');
+  //       if (response.data && response.data.length > 0) {
+  //         setFeaturedBlog(response.data[0]);
+  //       }
+  //       setLoading(false);
+  //     } catch (err) {
+  //       console.error('Error fetching featured blog:', err);
+  //       setLoading(false);
+  //     }
+  //   };
 
-    fetchFeaturedBlog();
-  }, []);
+  //   fetchFeaturedBlog();
+  // }, []);
 
-  // Format date
+  // // Format date
+  // const formatDate = (dateString?: Date) => {
+  //   if (!dateString) return '';
+  //   const date = new Date(dateString);
+  //   return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  // };
+
   const formatDate = (dateString?: Date) => {
     if (!dateString) return '';
     const date = new Date(dateString);
